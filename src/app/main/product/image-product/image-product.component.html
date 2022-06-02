@@ -1,0 +1,15 @@
+<div [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}" *ngFor="let item of arrayImage; let i = index" class="pt-12" style="width: 150px;height: 150px;position: relative;display: inline-block;">
+    <img  [src]="this.productService.getSitePath()+item"  onerror="this.src='assets/images/product/no_image.png'" style="padding: 12px;">
+    <button (click)="removeImageProduct(arrayImage[i],i)" mat-icon-button class="red" style="position: absolute;top:0;right: 0;">
+      <mat-icon>close</mat-icon>
+    </button>
+</div>
+<div [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}" *ngIf="this.limitUpload < 3" class="pt-12" style="width: 150px;height: 150px;position: relative;display: inline-block;">
+  <input type="file" id="btnUploadFile" class="inputFile" (change)="uploadAvatar($event)" placeholder="Upload file" accept=".image/jpeg, .png, .jpg">
+  <label for='btnUploadFile' class="labelUpload">
+    <img src="assets/images/product/add_image.png"  onerror="this.src='assets/images/product/no_image.png'" style="padding: 12px;">
+  </label>
+</div>
+<div>
+  <!-- <button class="teal m-12" mat-stroked-button (click)="saveImage()"><mat-icon>save</mat-icon> Lưu</button> -->
+</div>

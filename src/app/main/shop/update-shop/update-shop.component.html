@@ -1,0 +1,80 @@
+<h2 mat-dialog-title>Cập nhật cửa hàng</h2>
+<div mat-dialog-content>
+  <form [formGroup]="formCtrl">
+        <div class="h2 mb-24">Thông tin cửa hàng</div>
+            <mat-form-field style="width: 100%;" appearance="outline">
+              <mat-label>Tên cửa hàng</mat-label>
+              <input matInput formControlName="name">
+              <mat-icon matSuffix class="disabled-text">home</mat-icon>
+              <mat-error>Tên là bắt buộc!</mat-error>
+          </mat-form-field>
+            <mat-form-field style="width: 100%;" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email">
+                <mat-icon matSuffix class="disabled-text">email</mat-icon>
+                <mat-error>Email là bắt buộc!</mat-error>
+            </mat-form-field>
+            <mat-form-field style="width: 100%;" appearance="outline">
+                <mat-label>Số điện thoại</mat-label>
+                <input matInput  formControlName="phone">
+                <mat-icon matSuffix class="secondary-text">contact_phone</mat-icon>
+                <mat-error>Số điện thoại là bắt buộc!</mat-error>
+            </mat-form-field>
+        
+
+              <mat-form-field appearance="outline"  style="width: 100%;">
+                  <mat-label>Phương thức bán hàng</mat-label>
+                  <mat-select formControlName="ship">
+                      <mat-option [value]="item[0]" *ngFor="let item of [['0','Bán tại cửa hàng'],['1','Bán online'],['2','Cả hai']]">
+                          {{item[1]}}
+                      </mat-option>
+
+                  </mat-select>
+              </mat-form-field>
+   
+            <mat-form-field style="width: 100%;" appearance="outline">
+                <mat-label >Địa chỉ</mat-label>
+                <textarea matInput  formControlName="address">
+                    
+                </textarea>
+                <mat-error>Địa chỉ là bắt buộc!</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Tỉnh thành</mat-label>
+                <mat-select  formControlName="province_id" (selectionChange)="changeProvince($event)">
+                  <mat-option [value]="item.id" *ngFor="let item of listProvince">
+                    {{item.name}}
+                  </mat-option>
+                
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Quận /Huyện</mat-label>
+                <mat-select  formControlName="district_id" (selectionChange)="changeDistrict($event)">
+                  <mat-option [value]="item.id" *ngFor="let item of listDistrict">
+                    {{item.name}}
+                  </mat-option>
+                
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Xã phường</mat-label>
+                <mat-select  formControlName="wards_id">
+                  <mat-option [value]="item.id" *ngFor="let item of listWards">
+                    {{item.name}}
+                  </mat-option>
+                
+                </mat-select>
+              </mat-form-field>
+            <mat-form-field style="width: 100%;" appearance="outline">
+                <mat-label>Mô tả</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+                <mat-error>Mô tả là bắt buộc!</mat-error>
+            </mat-form-field>    
+  </form>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Hủy</button>
+  <button mat-raised-button  color="primary" (click)="updateShop()">Lưu</button>
+</div>

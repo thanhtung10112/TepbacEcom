@@ -1,0 +1,28 @@
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<div fxLayout="row wrap" fxLayout.xs="column" [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+  <div fxFlex.gt-xs="20%" *ngFor="let item of listProduct">
+    <div style="margin: 12px;height: 100%;padding-bottom: 12px;">
+      <a routerLink="/product/detail/{{item.id}}">
+        <mat-card matRipple style="height: 100%;">
+          <div class="img-product">
+            <img [src]="this.productService.getSitePath()+item.img_default" [alt]="item.name"
+              onerror="this.src='assets/images/product/no_image.png'"  style="max-height: 125px;">
+          </div>
+          <mat-card-content>
+            <mat-chip-list aria-label="Name selection">
+              <mat-chip color="accent" selected>{{item.name}}</mat-chip>
+              <mat-chip color="primary" selected>{{item.rate_count}} lượt mua</mat-chip>
+            </mat-chip-list>
+            <h5>{{item.alias}}</h5>
+            <p>
+              <star-rating [starType]="'icon'" [rating]="item.rate_score"></star-rating>
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+  </div>
+  <div class="message-box info" *ngIf="listProduct.length <=0 ">
+    Chưa có sản phẩm nào ở đây!
+  </div>
+</div>

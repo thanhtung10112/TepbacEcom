@@ -1,0 +1,55 @@
+<h1 mat-dialog-title style="text-align: center;">Chi tiết đơn hàng
+</h1>
+<div *ngIf="detailOrder" mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+    <div class="message-box info" *ngIf="detailOrder?.order?.status==0 && detailOrder?.order?.wrong">
+        Cảnh báo sai phạm : {{detailOrder?.order?.wrong.detail}}
+      </div>
+    <mat-list role="list">
+        <p><b>Thông tin khách hàng</b></p>
+        <p>Tên : {{detailOrder?.order?.name_user}}</p>
+
+        <p *ngIf="detailOrder?.order?.ship==1">Địa chỉ : {{detailOrder?.order?.address_user}}</p>
+        <p *ngIf="detailOrder?.order?.ship==0"><b>Yêu cầu : Nhận tại cửa hàng</b></p>
+        <p><b>Thông tin đơn hàng</b></p>
+        <p>Thời gian : {{detailOrder?.order?.add_time*1000 | date:'HH:mm dd-MM-yyyy'}}</p>
+        <p>Mã giảm giá : {{detailOrder?.order?.discount_code}}</p>
+        <p>Phí vận chuyển : {{detailOrder?.order?.shipping_fee | number}}</p>
+        <p>Tổng tiền : {{detailOrder.pay | number}} VNĐ</p>
+        <div *ngIf="detailOrder?.order?.ship==1 && detailOrder?.order?.stoking_confirm==0">
+            <button  mat-raised-button color="warn" (click)="confirmStoking()">Xác nhận còn hàng</button>
+        </div>
+        <div *ngIf="detailOrder?.order?.ship==0">
+            <button  mat-raised-button color="warn" (click)="actionOrder('cancel')">Hủy đơn</button>
+            <button  mat-raised-button color="accent" (click)="actionOrder('confirm')">Xác nhận</button>
+            <button  mat-raised-button color="primary" (click)="actionOrder('done')">Đã giao</button>
+        </div>
+    </mat-list>
+    <mat-list>
+        <p> <b>Thông tin sản phẩm</b></p>
+        <div *ngFor="let item of detailOrder?.product">
+          <div fxLayout="row" fxLayoutAlign="space-around center" >
+            <h4 mat-line [routerLink]="'/product-detail/'+item.product_id" (click)="onNoClick()"><b>{{item.name}}</b>
+            </h4>
+            <p mat-line>Giá : {{item.price/item.quantity | number}}đ </p>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-around center" >
+            <h4 mat-line>Số lượng : {{item.quantity}}</h4>
+            <p mat-line>Tổng: {{item.price | number}}đ </p>
+            </div>
+            <mat-divider></mat-divider>
+        </div>
+    </mat-list>
+
+    <mat-list *ngIf="detailOrder?.order?.shipping_code!='' && detailOrder?.order?.shipping_order_code!='' && detailOrder?.order?.shipping_link!='' && detailOrder?.order?.shipping_unit!=''">
+        <p> <b>Thông tin vận chuyển</b></p>
+        <p>Đơn vị vận chuyển : {{detailOrder?.order?.shipping_unit}}</p>
+        <p>Mã vận đơn : #{{detailOrder?.order?.shipping_code}}</p>
+        <p>Mã đơn hàng : #{{detailOrder?.order?.shipping_order_code}}</p>
+        <button mat-button  (click)="openNewTabLink()">Theo dõi đơn</button>
+    </mat-list>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Đóng</button>
+    <button mat-button color="accent" (click)="openReport()">Báo Cáo</button>
+</div>

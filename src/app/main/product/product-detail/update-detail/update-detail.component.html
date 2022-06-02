@@ -1,0 +1,8 @@
+<h1 mat-dialog-title style="text-align: center;">Cập nhật chi tiết sản phẩm</h1>
+<div mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+  <div [ngxSummernote]="config" [(ngModel)]='data'></div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Đóng</button>
+  <button mat-button color="accent" (click)="save()">Lưu</button>
+</div>

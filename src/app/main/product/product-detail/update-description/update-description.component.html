@@ -1,0 +1,10 @@
+<h1 mat-dialog-title style="text-align: center;">Cập nhật mô tả</h1>
+<div mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+  <mat-form-field class="example-full-width" appearance="outline" style="width:100%;">
+    <textarea matInput placeholder="Mô tả sản phẩm" [(ngModel)]='data'></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Đóng</button>
+  <button mat-button color="accent" (click)="save()">Lưu</button>
+</div>

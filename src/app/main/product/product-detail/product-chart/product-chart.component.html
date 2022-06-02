@@ -1,0 +1,8 @@
+<div>
+    <h2><b>Biểu đồ lượt mua hàng</b></h2>
+</div>
+<div echarts [options]="chartProduct" class="demo-chart"></div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="warn">Cancel</button>
+</mat-dialog-actions>

@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Đặt hàng</h2>
+<div mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+  <form [formGroup]="formOrder">
+    <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Số điện thoại" formControlName="phone" [matAutocomplete]="autoPhone" required>
+      <mat-autocomplete #autoPhone="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptionsPhone | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Địa chỉ" formControlName="address" [matAutocomplete]="autoAddress" required>
+      <mat-autocomplete #autoAddress="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptionsAddress |  async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field style="width: 100%;">
+      <input matInput placeholder="Tên" formControlName="name" [matAutocomplete]="autoName" required>
+      <mat-autocomplete #autoName="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptionsName | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Hủy</button>
+  <button mat-raised-button color="accent" (click)="saveOrder()">Đặt hàng</button>
+</div>  

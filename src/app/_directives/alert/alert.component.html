@@ -1,0 +1,6 @@
+<div id="alert-popup">
+    <div *ngFor="let alert of alerts.reverse()" class="{{ cssClass(alert) }} alert-dismissable" [style.opacity]="alert.hidden ? 0 : 1">
+        {{alert.message}}
+        <a class="close" (click)="removeAlert(alert)">&times;</a>
+    </div>
+</div>

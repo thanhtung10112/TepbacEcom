@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Sửa lựa chọn sản phẩm</h2>
+<div mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+    <form [formGroup]="formUpdate">
+          <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Tên Lựa Chọn</mat-label>
+              <input #input maxlength="20" matInput placeholder="Tên" formControlName="name" (focusout)="validateName()">
+              <mat-hint>{{input.value?.length || 0}}/20 kí tự</mat-hint>
+              <mat-error *ngIf="formUpdate.get('name').hasError('duplicate')">Tên lựa chọn bị trùng</mat-error>
+          </mat-form-field>
+          <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Khối lượng của sản phẩm(KG)</mat-label>
+            <input matInput placeholder="Khối lượng" formControlName="weight">
+        </mat-form-field>
+          <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Chi Tiết Lựa Chọn</mat-label>
+            <input matInput placeholder="Chi Tiết" formControlName="detail">
+          </mat-form-field>
+          <mat-form-field style="width: 100%;" appearance="outline">
+              <mat-label>Giá Gốc (Giá gốc phải lớn hơn giá bán)</mat-label>
+              <input matInput placeholder="Giá Gốc" [value]="fake_price_root" formControlName="price_root" (input)="convertNumber($event.target.value,'price_root')">
+          </mat-form-field>
+          <mat-form-field style="width: 100%;" appearance="outline">
+              <mat-label>Giá Bán</mat-label>
+              <input matInput placeholder="Giá Bán" [value]="fake_price_new" formControlName="price_new" (input)="convertNumber($event.target.value,'price_new')">
+          </mat-form-field>
+          <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Số lượng tồn kho</mat-label>
+            <input matInput placeholder="Số lượng" formControlName="quantity" type="number">
+          </mat-form-field>
+    </form>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Hủy</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!formUpdate.valid">Lưu</button>
+</div>   

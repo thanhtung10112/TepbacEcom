@@ -1,0 +1,62 @@
+<div class="page-layout carded fullwidth inner-scroll" style="height: max-content;">
+
+
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg green-800-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- CONTENT HEADER -->
+        <div class="header green-800-bg p-24" fxLayout="row" fxLayoutAlign="start center">
+
+
+            <div>
+                <h2 class="m-0">SẢN PHẨM</h2>
+                <p *ngFor="let row of dataHotlineEmail">Hotline : {{row.hotline}} | Email : {{row.email}}</p>
+            </div>
+
+            <div class="select-shop mat-white-bg product-action ">
+                <mat-form-field class="select-field-shop" mat-no-float class="m-0" floatLabel="never">
+                    <mat-label>Chọn cửa hàng</mat-label>
+                    <mat-select (selectionChange)="getListProductByShop($event.value)">
+                        <mat-option value="">Tất Cả</mat-option>
+                        <mat-option *ngFor="let item of listShop" [value]="item.id">{{item.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+
+
+            <button routerLink="/product/insert-product" class="button-action add-button green-bg" mat-raised-button>
+                <mat-icon>add</mat-icon> Đăng sản phẩm
+            </button>
+        </div>
+        <!-- / CONTENT HEADER -->
+
+        <div class="content-card mat-white-bg">
+            <!-- CONTENT TOOLBAR -->
+            <div class="toolbar px-24">
+                <nav mat-tab-nav-bar class="mt-16">
+                    <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive
+                        #rla="routerLinkActive" [active]="rla.isActive">
+                        {{link.label}}
+                    </a>
+                </nav>
+            </div>
+            <!-- / CONTENT TOOLBAR -->
+
+            <!-- CONTENT -->
+            <div class="content p-24" fusePerfectScrollbar>
+
+                <router-outlet></router-outlet>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+</div>

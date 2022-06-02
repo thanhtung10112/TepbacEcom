@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Sửa thông tin sản phẩm</h2>
+<div mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+    <form [formGroup]="formUpdate">
+          <mat-form-field style="width: 100%;" appearance="outline" *ngIf="data.product_root_id==0">
+            <mat-label>Tên Sản Phẩm</mat-label>
+              <input matInput placeholder="Tên"  formControlName="name">
+          </mat-form-field>
+          <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Tên Chi Tiết Sản Phẩm</mat-label>
+            <input matInput placeholder="Tên Chi Tiết"  formControlName="alias">
+        </mat-form-field>
+        <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Đơn Vị Tính</mat-label>
+            <input matInput placeholder="Đơn Vị Tính"  formControlName="unit">
+        </mat-form-field>
+        <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Chọn Cửa Hàng</mat-label>
+            <mat-select [placeholder]="'Chọn shop'" formControlName="shop_id">
+                <mat-option *ngFor="let item of listShop" [value]="item.id">
+                    {{item.name}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+    </form>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Hủy</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!formUpdate.valid">Lưu</button>
+</div>   

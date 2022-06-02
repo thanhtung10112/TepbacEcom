@@ -1,0 +1,31 @@
+<h1 mat-dialog-title style="text-align: center;">Chi tiết</h1>
+<div mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+  
+    <div>
+      <b>
+        {{data.username}} - {{data.add_time*1000 | date:'hh:mm a dd-MM-yyyy'}}
+      </b>
+      <p>
+        {{data.content}}
+      </p>
+     
+    </div>
+
+    <div *ngFor="let val of list" >
+      
+        <b *ngIf="val.is_shop==1">
+          Shop - {{val.add_time*1000 | date:'hh:mm a dd-MM-yyyy'}}
+        </b>
+        <b *ngIf="val.is_shop==0">
+          {{val.username}} - {{val.add_time*1000 | date:'hh:mm a dd-MM-yyyy'}}
+        </b>
+    
+      <p>{{val.content}}</p>
+    </div>
+  
+  
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Đóng</button>
+</div>

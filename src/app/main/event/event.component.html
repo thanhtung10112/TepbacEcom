@@ -1,0 +1,67 @@
+<div class="page-layout simple fullwidth">
+    <div>
+        <!-- CONTENT -->
+        <div class="content">
+            <div class="header p-24 blue-800-bg" fxLayout="column" fxLayoutAlign="start none">
+                <h1>Đăng kí sự kiện</h1>
+                <p *ngFor="let row of dataHotlineEmail">Hotline : {{row.hotline}} | Email : {{row.email}}</p>
+                <button *ngIf="data" (click)="addProduct()" class="button-action add-button green-bg" mat-raised-button>
+                    <mat-icon>add</mat-icon> Thêm sản phẩm
+                </button>
+            </div>
+
+            <mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+            <div *ngIf="data" class="p-24 widget" fxLayout="column" fxLayout.gt-sm="row" fxLayoutAlign="center none">
+                <fuse-widget class="px-24" [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                    fxFlex="100" fxFlex.gt-sm="50">
+                    <mat-card class="link fuse-card auto-width">
+                        <mat-card-content class="p-24">
+                            <div fxLayout="row" fxLayoutAlign="start center">
+                                <p class="green-fg">{{data.infor.name}}</p>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="start start">
+                                <p>{{data.infor.description}}</p>
+                            </div>
+                            <div fxLayout="column" fxLayoutAlign="start start">
+                                <p>Nội dung chương trình khuyến mãi</p>
+                                <p>1.Miễn phí vận chuyển</p>
+                                <p>2.Trợ giá vận chuyển</p>
+                                <p>3.Sản phẩm đồng giá</p>
+                                <p>4.Giảm giá sản phẩm</p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </fuse-widget>
+            </div>
+            <div *ngIf="data" fxLayout="row wrap" fxLayout.xs="column"
+                [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+
+                <div fxFlex.gt-xs="20%" *ngFor="let item of data.list ; let i = index">
+                    <div style="margin: 12px;height: 100%;padding-bottom: 12px;">
+
+                        <mat-card style="height: 100%;">
+                            <div class="img-product">
+                                <img [src]="this.productService.getSitePath()+item.img_default" [alt]="item.name"
+                                    onerror="this.src='assets/images/product/no_image.png'" style="max-height: 125px;">
+                            </div>
+                            <mat-card-content>
+                                <h5><b>{{item.name}}</b> | {{item.alias}}</h5>
+                                <div [innerHTML]="item.type_show=='normal' ? 'Banner' : 'Flashsale'" class="blue-fg">
+                                </div>
+                                <div class="green-fg">{{item.type_name}}</div>
+                                <div fxLayoutAlign="center center">
+                                    <button mat-button color="primary" (click)="editProduct(item)">Sửa</button>
+                                    <button mat-button color="warn" (click)="removeProduct(item,i)">Xóa</button>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+
+                    </div>
+                </div>
+                <div class="message-box info" *ngIf="data.list.length <=0 ">
+                    Danh sách trống.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

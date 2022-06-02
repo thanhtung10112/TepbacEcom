@@ -1,0 +1,41 @@
+.header {
+    position: relative;
+    color: #fff;
+    .button-action {
+        position: absolute;
+        padding: 5px 20px;
+        bottom: -22px;
+        right: 16px;
+        z-index: 999;
+        border-radius: 30px;
+        color: #fff;
+    }
+}
+.select-shop {
+    width: 220px!important;
+    margin-left: 20px;
+    mat-form-field {
+        margin: 0;
+        padding: 0;
+        width: 200px !important;
+        display: block !important;
+    }
+}
+
+.select-echart {
+    width: 220px!important;
+    display: flex;
+    justify-content: end;
+    mat-form-field {
+        margin: 0;
+        padding: 0;
+        width: 130px !important;
+        display: block !important;
+    }
+}
+
+.product-action {
+    position: absolute;
+    right: 16px;
+    border-radius: 30px;
+}

@@ -1,0 +1,38 @@
+/****************************************************/
+/* Filename: alert.component.scss
+/* Created: Tran Duy Phong
+/* Change history:
+/* 29.06.2008 / Phong
+/*
+/****************************************************/
+:host{
+    #alert-popup {
+        position: absolute;
+        bottom: 1em;
+        left: 1em;
+        z-index: 10000;
+    }
+    .alert{
+        padding: 10px;
+        margin: 0.5em;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 5px;
+        width: 200px;
+        opacity: 1;
+        transition: opacity 2s;
+        box-shadow: 1px 1px 5px gray;
+    }
+    .alert-success{
+        background-color: #A5D6A7;
+    }
+    .alert-info{
+        background-color: #81D4FA;
+    }
+    .alert-warning{
+        background-color: #FFCC80;
+    }
+    .alert-danger{
+        background-color: #EF9A9A;
+    }
+}

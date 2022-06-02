@@ -1,0 +1,43 @@
+<div fxLayout="column" fxFlex fusePerfectScrollbar>
+
+    <mat-list class="date accent-200-bg"  cdkFocusRegionStart>
+
+        <h3 matSubheader cdkFocusInit>
+            <span>Hôm Nay</span>
+        </h3>
+
+        <div class="secondary-text mat-display-1 mb-0 p-16">
+            <div class="mb-12">
+                {{date | date:'EEEE'}}
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <span> {{date | date:'d'}}</span>
+                <span class="mat-subheading-1">th</span>
+                <span> {{date | date:'MMMM'}}</span>
+            </div>
+        </div>
+    </mat-list>
+
+    <mat-divider cdkFocusRegionEnd></mat-divider>
+    <div *ngIf="this.productService.createdShop">
+        <mat-expansion-panel hideToggle="true">
+            <mat-expansion-panel-header>
+                <mat-icon>mail_outline</mat-icon>
+                <mat-panel-title>
+                    Tin Nhắn Tép Bạc
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div>
+                <div *ngFor="let item of listFeedBack;let i=index">
+                    <p>Bạn : {{item.content}}</p>
+                    <h3><b>Tepbac : {{item.feedback}}</b> </h3>
+                    <mat-checkbox class="example-margin" (click)="seen(item.id,i)">Đã Xem</mat-checkbox>
+                    <mat-divider></mat-divider>
+                </div>
+                <div *ngIf="listFeedBack.length == 0">
+                    <span>Không có thông báo mới</span>
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </div>    
+</div>

@@ -1,0 +1,51 @@
+<div class="page-layout simple fullwidth">
+  <!-- CONTENT -->
+  <div class="content" fxLayout="column">
+    <div class="header px-24 warn-900-bg" fxLayout="row" fxLayoutAlign="start center">
+      <h1>CỬA HÀNG</h1>
+      <button routerLink="create" class="button-action add-button warn-bg" mat-raised-button>
+        <mat-icon>add</mat-icon> Tạo của hàng
+      </button>
+    </div>
+
+    <mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+
+    <div class="message-box info" style="margin-top: 15px;" *ngFor="let item of wrong">
+      Cảnh báo sai phạm : {{item.detail}}
+    </div>
+    <div class="p-24 widget" fxLayout.xs="column" fxLayout.sm="column" fxLayout.gt-sm="row" fxLayoutAlign="center none"
+      [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+
+      <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="33" *ngFor="let item of listShop">
+        <div style="margin: 10px;">
+          <a routerLink="detail/{{item.id}}">
+            <mat-card class="example-card">
+              <div class="p-16" fxLayout="row" fxLayoutAlign="start center">
+                <img class="w-40 h-40 border-radius-100" [src]="this.shopService.getSitePath() + item.logo">
+
+                <div class="ml-16">
+                  <div class="text-bold">{{item.name}}</div>
+                  <div class="h5 text-bold secondary-text">{{item.email}}</div>
+                </div>
+              </div>
+
+
+              <img mat-card-image
+                [src]="this.shopService.getSitePath() + (item.image).replace('/thumb_image','/ge_image/')"
+                onerror="this.src='assets/images/product/no_image.png'" [alt]="item.name">
+
+              <div class="p-16">
+                <div class="h1">{{item.phone}}</div>
+                <div class="h4 secondary-text">{{item.address}}</div>
+              </div>
+              <div class="p-16 pt-0 line-height-1.75">
+                {{item.description}}
+              </div>
+            </mat-card>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

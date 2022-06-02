@@ -1,0 +1,17 @@
+@import "src/@fuse/scss/fuse";
+.header {
+    position: relative;
+    color: #fff;
+    .button-action {
+        position: absolute;
+        padding: 5px 20px;
+        bottom: -22px;
+        right: 16px;
+        z-index: 999;
+        border-radius: 30px;
+        color: #fff;
+    }
+}
+.top-bg {
+    height: 185px !important;
+}

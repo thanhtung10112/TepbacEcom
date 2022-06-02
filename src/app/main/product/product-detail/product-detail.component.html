@@ -1,0 +1,290 @@
+<div class="page-layout simple fullwidth" style="height: max-content;">
+    <div>
+        <div fxLayout="column">
+
+            <mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+            <div class="p-12" fxLayout="row" fxLayoutAlign="space-around center">
+                <mat-card fxFlex.gt-xs="100%" fxFlex.gt-md="60%" class="main"
+                    [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+                    <mat-card-content>
+                        <div class="message-box warn" *ngIf="item.blocked==1 && item.detail_wrong">
+                            Cảnh báo sai phạm : {{item.detail_wrong.detail}}
+                        </div>
+                        <div fxLayout fxLayout.xs="row" fxLayoutAlign="space-between"
+                            style="margin-bottom: 20px; padding: 12px">
+                            <div fxFlex="45%" style="position: relative;" fxLayout="column"
+                                fxLayoutAlign="space-between center">
+                                <div fxFlex="70%" style="width: 100%;">
+                                    <img style="height: 320px" [style.object-fit]="'contain'"
+                                        [src]="(this.productService.getSitePath()+arrayImage[imageSelected]?.meta_value).replace('thumb_image', 'ge_image')"
+                                        [alt]="item.name" onerror="this.src='assets/images/product/no_image.png'">
+                                    <button mat-raised-button color="warn"
+                                        style="position: absolute;top: auto;right: 0;" (click)="removeImage()"
+                                        *ngIf="arrayImage[imageSelected]?.root==0">
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+                                    <button mat-raised-button color="primary"
+                                        style="position: absolute;top: auto;left: 0;" (click)="chooseImage()">Chọn làm
+                                        đại diện</button>
+                                </div>
+                                <div fxFlex="20%" fxLayout="row" fxLayoutAlign="center center">
+                                    <div fxFlex="25%" style="text-align: left;"
+                                        *ngFor="let img of item.image;let i=index">
+                                        <img style="width: 100%; height: 60px;" (click)="showImage(i)"
+                                            [ngClass]="(i==imageSelected) ? 'selected' : ''"
+                                            [src]="(img.meta_key=='null') ? img.meta_value : this.productService.getSitePath()+img.meta_value"
+                                            [alt]="item.name" onerror="this.src='assets/images/product/no_image.png'">
+                                        <input type="file" #file id="btnUploadFile" class="inputFile"
+                                            (change)="uploadAvatar($event)" placeholder="Upload file"
+                                            accept=".image/jpeg, .png, .jpg">
+                                    </div>
+                                </div>
+                            </div>
+                            <div fxFlex="50%" style="padding-left: 20px; border-left: 2px solid lightgray">
+                                <div fxLayout="row" fxLayoutAlign="space-between center">
+                                    <h2><b>{{item.name}}</b></h2>
+                                    <div>
+                                        <button style="margin-right: 10px;" mat-raised-button color="accent"
+                                            (click)="openEditProduct()">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <button mat-raised-button color="primary" (click)="openBarChart()">
+                                            <mat-icon>bar_chart</mat-icon>
+                                        </button>
+                                    </div>
+
+                                </div>
+                                <p>({{item.alias}})</p>
+                                <div fxLayout="row" fxLayoutAlign="space-between center">
+                                    <h3>Khoảng Giá</h3>
+                                    <h3>{{item.min_price | number:'1.0':'en-US'}} - {{item.max_price |
+                                        number:'1.0':'en-US'}}₫</h3>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="space-between center">
+                                    <h3>Cửa Hàng</h3>
+                                    <h3>{{item.shop_name}}</h3>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="space-between center">
+                                    <h3>Sao</h3>
+                                    <h3>
+                                        <star-rating [starType]="'icon'" [rating]="item.rate_score"></star-rating>
+                                    </h3>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="space-between center">
+                                    <h3>Bình Luận</h3>
+                                    <h3>{{item?.count_comment}}</h3>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="space-between center">
+                                    <h3>Đơn vị tính</h3>
+                                    <h3 *ngIf="item.unit">{{item.unit.meta_value}}</h3>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="space-between center">
+                                    <h3>Tồn kho</h3>
+                                    <h3>{{item?.inventory}}</h3>
+                                </div>
+                                <h3>Mã Giảm Giá</h3>
+                                <mat-chip-list>
+                                    <mat-chip color="accent" selected class="chip"
+                                        (click)="openDetailDiscount(discount)"
+                                        *ngFor="let discount of item.discount_code;let i = index">
+                                        {{discount.code}}
+                                    </mat-chip>
+                                    <mat-chip color="accent" selected (click)="openDiscount()">
+                                        <mat-icon>add</mat-icon> Tạo Mới
+                                    </mat-chip>
+                                </mat-chip-list>
+                            </div>
+
+                        </div>
+
+                        <mat-divider></mat-divider>
+                        <div class="p-12">
+                            <h2 style="text-align: center;">Lựa Chọn Sản Phẩm</h2>
+                            <div fxLayout="column">
+                                <div fxLayout="row" style="font-weight: 600; font-size: 1.1em;">
+                                    <div fxFlex="5">STT</div>
+                                    <div fxFlex="20">TÊN LỰA CHỌN</div>
+                                    <div fxFlex="10">KHỐI LƯỢNG</div>
+                                    <div fxFlex="20">GIÁ NIÊM YẾT</div>
+                                    <div fxFlex="20">GIÁ BÁN</div>
+                                    <div fxFlex="10">SỬA</div>
+                                    <div fxFlex="10">XÓA</div>
+                                </div>
+                                <div *ngFor="let option of item.options; let i = index" fxLayout="row"
+                                    style="height: 32px; margin-top: 15px;">
+                                    <div fxFlex="5" style="line-height: 32px; font-size: 1.1em;">
+                                        {{i + 1}}
+                                    </div>
+                                    <div fxFlex="20" style="line-height: 32px; font-size: 1.1em;">
+                                        {{option.name}}
+                                    </div>
+                                    <div fxFlex="10" style="line-height: 32px; font-size: 1.1em;">
+                                        {{option.weight}} KG
+                                    </div>
+                                    <div fxFlex="20" style="line-height: 32px; font-size: 1.1em;">
+                                        {{option.price_root | number:'1.0':'en-US'}}₫
+                                    </div>
+                                    <div fxFlex="20" style="line-height: 32px; font-size: 1.1em;">
+                                        {{option.price_new | number:'1.0':'en-US'}}₫
+                                    </div>
+                                    <div fxFlex="10">
+                                        <mat-chip style="border-radius: 4px;" selected color="accent"
+                                            (click)="openUpdateOption(i)">
+                                            <mat-icon>edit</mat-icon>
+                                        </mat-chip>
+                                    </div>
+                                    <div fxFlex="10">
+                                        <mat-chip style="border-radius: 4px;" selected color="warn"
+                                            (click)="removeOption(i)">
+                                            <mat-icon>delete</mat-icon>
+                                        </mat-chip>
+                                    </div>
+                                </div>
+                                <div fxLayout="row">
+                                    <div fxFlex="15">
+                                        <mat-chip style="margin-top: 15px;" selected color="accent"
+                                            (click)="openAddOption()">
+                                            <mat-icon>add</mat-icon> Thêm
+                                        </mat-chip>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class="p-12">
+                            <h2 style="text-align: center;">Thuộc Tính Sản Phẩm</h2>
+                            <div fxLayout="column">
+                                <h3>Loài Sử Dụng</h3>
+                                <mat-chip-list *ngIf="!showUseFor">
+                                    <mat-chip color="primary" selected class="chip"
+                                        *ngFor="let label of item.term?.usefor;let i = index">
+                                        {{label.name}}
+                                    </mat-chip>
+                                    <mat-chip style="border-radius: 4px;" color="accent" selected
+                                        (click)="showEditTerm('usefor')">
+                                        <mat-icon>edit</mat-icon>
+                                    </mat-chip>
+                                </mat-chip-list>
+
+                                <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;"
+                                    *ngIf="showUseFor">
+                                    <div style="width: 50%">
+                                        <mat-form-field [formGroup]="selectedTerm" style="width: 100%;"
+                                            appearance="outline">
+                                            <mat-select placeholder="Chọn loài sử dụng" multiple
+                                                formControlName="usefor">
+                                                <mat-option *ngFor="let item of listTerm.usefor" [value]="item"
+                                                    [style.margin-left.em]="item.level*2"
+                                                    (onSelectionChange)="selectionChange('usefor', $event)">
+                                                    {{item.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <button mat-raised-button color="primary" (click)="saveTerm('usefor')">
+                                            <mat-icon>done</mat-icon>
+                                        </button>
+                                        <button mat-raised-button color="accent" (click)="closeEditTerm()">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <h3 style="margin-top: 20px;">Nhóm Công Dụng</h3>
+                                <mat-chip-list *ngIf="!showUses">
+                                    <mat-chip color="primary" selected class="chip"
+                                        *ngFor="let label of item.term?.uses;let i = index">
+                                        {{label.name}}
+                                    </mat-chip>
+                                    <mat-chip style="border-radius: 4px;" color="accent" selected
+                                        (click)="showEditTerm('uses')">
+                                        <mat-icon>edit</mat-icon>
+                                    </mat-chip>
+                                </mat-chip-list>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;"
+                                    *ngIf="showUses">
+                                    <div style="width: 50%;">
+                                        <mat-form-field [formGroup]="selectedTerm" style="width: 100%;"
+                                            appearance="outline">
+                                            <mat-select placeholder="Chọn nhóm công dụng" multiple
+                                                formControlName="uses">
+                                                <mat-option *ngFor="let item of listTerm.uses" [value]="item"
+                                                    [style.margin-left.em]="item.level*2"
+                                                    (onSelectionChange)="selectionChange('uses', $event)">
+                                                    {{item.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <button mat-raised-button color="primary" (click)="saveTerm('uses')">
+                                            <mat-icon>done</mat-icon>
+                                        </button>
+                                        <button mat-raised-button color="accent" (click)="closeEditTerm()">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <h3 style="margin-top:20px">Nhóm thành phần</h3>
+                                <mat-chip-list *ngIf="!showMaterial">
+                                    <mat-chip color="primary" selected class="chip"
+                                        *ngFor="let label of item.term?.material;let i = index">
+                                        {{label.name}}
+                                    </mat-chip>
+                                    <mat-chip style="border-radius: 4px;" color="accent" selected
+                                        (click)="showEditTerm('material')">
+                                        <mat-icon>edit</mat-icon>
+                                    </mat-chip>
+                                </mat-chip-list>
+                                <div fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;"
+                                    *ngIf="showMaterial">
+                                    <div style="width: 50%;">
+                                        <mat-form-field [formGroup]="selectedTerm" style="width: 100%;"
+                                            appearance="outline">
+                                            <mat-select placeholder="Chọn nhóm thành phần" multiple
+                                                formControlName="material">
+                                                <mat-option *ngFor="let item of listTerm.material" [value]="item"
+                                                    [style.margin-left.em]="item.level*2"
+                                                    (onSelectionChange)="selectionChange('material', $event)">
+                                                    {{item.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <button mat-raised-button color="primary" (click)="saveTerm('material')">
+                                            <mat-icon>done</mat-icon>
+                                        </button>
+                                        <button mat-raised-button color="accent" (click)="closeEditTerm()">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class="p-12">
+                            <h2 style="text-align: center;">Mô Tả</h2>
+                            <div [innerHTML]="item.description"></div>
+                            <button (click)="openEditDescription(item.description)" mat-raised-button color="primary">
+                                <mat-icon>edit</mat-icon>
+                                Sửa
+                            </button>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class="p-12">
+                            <h2 style="text-align: center;">Chi Tiết</h2>
+                            <div [innerHTML]="item.detail"></div>
+                            <button (click)="openEditDetail(item.detail)" mat-raised-button color="primary">
+                                <mat-icon>edit</mat-icon>
+                                Sửa
+                            </button>
+                        </div>
+
+                    </mat-card-content>
+                    <mat-divider></mat-divider>
+                    <mat-card-actions style="text-align: end;">
+                        <button mat-button (click)="removeProduct()">
+                            <mat-icon>delete</mat-icon> Xóa Sản Phẩm
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>

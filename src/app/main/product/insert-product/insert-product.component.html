@@ -1,0 +1,369 @@
+<div class="page-layout carded fullwidth tabbed inner-scroll" style="height: max-content;">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg green-800-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- CONTENT HEADER -->
+        <div class="header green-800-bg p-24" fxLayout="row" fxLayoutAlign="start center">
+            <h2 class="m-0 link" routerLink="/product">SẢN PHẨM</h2>
+        </div>
+
+        <div class="content-card mat-white-bg">
+            <!-- CONTENT TOOLBAR -->
+            <div class="toolbar px-24">
+                <h1>THÊM SẢN PHẨM</h1>
+            </div>
+
+            <div class="content" class="p-24" fusePerfectScrollbar>
+
+                <div fxLayout="column">
+                    <mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+                    <div fxLayout="row" fxLayoutAlign="space-around center">
+                        <mat-vertical-stepper fxFlex.gt-xs="100%" fxFlex.gt-md="80%" [linear]="isLinear" #stepper>
+                            <mat-step [stepControl]="formStep1">
+                                <form [formGroup]="formStep1">
+                                    <ng-template matStepLabel>Thông tin chung</ng-template>
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-label>Chọn Cửa Hàng</mat-label>
+                                        <mat-select [placeholder]="'Chọn shop'" formControlName="shop_id">
+                                            <mat-option *ngFor="let item of listShop" [value]="item.id">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-label>Thương hiệu</mat-label>
+                                        <mat-select placeholder="Chọn thương hiệu" formControlName="company_id"
+                                            (selectionChange)="onCompanyChange($event)">
+                                            <mat-form-field appearance="standard" style="width:93%; margin: 0 20px;">
+                                                <input matInput type="text" (input)="search($event)"
+                                                    formControlName="compSearch" placeholder="Tìm thương hiệu"
+                                                    autocomplete="off">
+                                                <mat-icon matPrefix>search</mat-icon>
+                                            </mat-form-field>
+                                            <mat-option [value]="0">
+                                                Thương hiệu mới
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of companies$ | async" [value]="item.id">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-label>Sản phẩm gốc</mat-label>
+                                        <mat-select placeholder="Chọn sản phẩm theo thương hiệu"
+                                            formControlName="product_root_id" (selectionChange)="getProductRoot()">
+                                            <mat-option [value]="0">
+                                                Sản phẩm mới
+                                            </mat-option>
+                                            <mat-option *ngFor="let item of listPrRoot" [value]="item.id">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-label>Nhãn hiệu</mat-label>
+                                        <input matInput placeholder="Nhãn hiệu" formControlName="name">
+                                    </mat-form-field>
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-label>Tên Hiển Thị</mat-label>
+                                        <input matInput placeholder="Tên hiển thị sản phẩm" formControlName="alias">
+                                    </mat-form-field>
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-label>Đơn Vị</mat-label>
+                                        <input matInput placeholder="Đơn vị sản phẩm" formControlName="unit">
+                                    </mat-form-field>
+                                    <div>
+                                        <button mat-button matStepperNext [disabled]="formStep1.invalid">Tiếp
+                                            theo</button>
+                                    </div>
+                                </form>
+                            </mat-step>
+                            <mat-step [stepControl]="formStep2">
+                                <form [formGroup]="formStep2">
+                                    <ng-template matStepLabel>Lựa chọn sản phẩm</ng-template>
+                                    <mat-radio-group aria-label="Chọn 1 lựa chọn">
+                                        <mat-radio-button [checked]="!hasOption" (click)="toggleOption(false)">Sản phẩm
+                                            có 1 lựa chọn mặc định</mat-radio-button>
+                                        <mat-radio-button [checked]="hasOption" (click)="toggleOption(true)"
+                                            style="margin-left: 15px;" [value]="true">Sản phẩm có nhiều lựa chọn
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                    <div *ngIf="!hasOption" style="margin-top: 25px;">
+                                        <div>
+                                            <small class="message-box info" style="font-size: 1em;">
+                                                <mat-icon style="vertical-align: middle;">info</mat-icon> Sau khi hoàn
+                                                tất đăng bạn vẫn có thể thêm lựa chọn ở trang chi tiết sản phẩm!
+                                            </small>
+                                        </div>
+                                        <mat-form-field style="width: 100%; margin-top: 30px;" appearance="outline">
+                                            <mat-label>Khối lượng của sản phẩm (KG)</mat-label>
+                                            <input matInput placeholder="Khối lượng" formControlName="all_weight">
+                                        </mat-form-field>
+                                        <mat-form-field style="width: 100%; margin-top: 30px;" appearance="outline">
+                                            <mat-label>Số lượng tồn kho</mat-label>
+                                            <input matInput placeholder="Khối lượng" formControlName="all_quantity">
+                                        </mat-form-field>
+                                        <mat-form-field style="width: 100%; margin-top: 30px;" appearance="outline">
+                                            <mat-label>Giá niêm yết</mat-label>
+                                            <input matInput placeholder="Giá niêm yết của sản phẩm"
+                                                formControlName="default_price_root"
+                                                (input)="convertNumber($event.target.value,'default_price_root')"
+                                                autocomplete="off">
+                                        </mat-form-field>
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <mat-label>Giá bán (nhỏ hơn giá niêm yết)</mat-label>
+                                            <input matInput placeholder="Giá bán sản phẩm"
+                                                formControlName="default_price_new"
+                                                (input)="convertNumber($event.target.value,'default_price_new')"
+                                                autocomplete="off">
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="hasOption" style="margin-top: 25px;">
+                                        <mat-label>Danh sách (xóa thẻ để xóa lựa chọn)</mat-label>
+                                        <mat-chip-list #chipList aria-label="Các lựa chọn hiện có"
+                                            style="margin-bottom: 20px;">
+                                            <mat-chip
+                                                *ngFor="let option of formStep2.get('optionList').controls; let i=index"
+                                                [removable]="true" (removed)="removeOption(i)" selected color="accent">
+                                                {{(option.get('name').value).length>0? option.get('name').value : '(#
+                                                '+(i+1)+')'}}
+                                                <mat-icon matChipRemove>cancel</mat-icon>
+                                            </mat-chip>
+                                        </mat-chip-list>
+                                        <button (click)="addOption()" class="button-add green-bg" mat-raised-button>
+                                            <mat-icon>add</mat-icon> Thêm lựa chọn
+                                        </button>
+                                        <div>
+                                            <small class="message-box info" style="font-size: 1em;">
+                                                <mat-icon style="vertical-align: middle;">info</mat-icon> Bạn có thể
+                                                nhập giá trị ở hàng tiêu đề để áp dụng cho tất cả các hàng bên dưới, hãy
+                                                nhập đủ tất cả ô bạn nhé!
+                                            </small>
+                                        </div>
+                                        <div fxLayout="row"
+                                            style="margin-top:20px;background-color: rgb(250, 250, 250);padding: 20px 0 0 20px;">
+                                            <div fxFlex="15" fxLayout="column">
+                                                <div style="color: black; font-weight: bold; font-size: 1.2em;">Tên
+                                                </div>
+                                                <small style="font-size: 0.9em;">(tối đa 20 kí tự và không trùng
+                                                    nhau)</small>
+                                            </div>
+                                            <div fxFlex="15" fxLayout="column">
+                                                <div style="color: black; font-weight: bold; font-size: 1.2em;">Khối
+                                                    lượng sản phẩm(KG)</div>
+                                                <mat-form-field style="width: 80%;">
+                                                    <input matInput placeholder="Nhấn Enter để nhập tất cả"
+                                                        formControlName="all_weight"
+                                                        (keydown.enter)="enterAll('all_weight', $event)">
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxFlex="20" fxLayout="column">
+                                                <div style="color: black; font-weight: bold; font-size: 1.2em;">Chi tiết
+                                                </div>
+                                                <mat-form-field style="width: 80%;">
+                                                    <input matInput placeholder="Nhấn Enter để nhập tất cả"
+                                                        formControlName="all_detail"
+                                                        (keydown.enter)="enterAll('detail', $event)">
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxFlex="20" fxLayout="column">
+                                                <div style="color: black; font-weight: bold; font-size: 1.2em;">Giá niêm
+                                                    yết</div>
+                                                <mat-form-field style="width: 80%;">
+                                                    <input matInput placeholder="Nhấn Enter để nhập tất cả"
+                                                        formControlName="all_price_root"
+                                                        (keydown.enter)="enterAll('price_root', $event)"
+                                                        (input)="convertNumber($event.target.value,'all_price_root')">
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxFlex="20" fxLayout="column">
+                                                <div style="color: black; font-weight: bold; font-size: 1.2em;">Giá bán
+                                                </div>
+                                                <mat-form-field style="width: 80%;">
+                                                    <input matInput placeholder="Nhấn Enter để nhập tất cả"
+                                                        formControlName="all_price_new"
+                                                        (keydown.enter)="enterAll('price_new', $event)"
+                                                        (input)="convertNumber($event.target.value,'all_price_new')">
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxFlex="10" fxLayout="column">
+                                                <div style="color: black; font-weight: bold; font-size: 1.2em;">Số lượng
+                                                    tồn kho</div>
+                                                <mat-form-field style="width: 80%;">
+                                                    <input matInput placeholder="Nhấn Enter để nhập tất cả"
+                                                        formControlName="all_quantity"
+                                                        (keydown.enter)="enterAll('all_quantity', $event)">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div (keydown.enter)="$event.preventDefault()" style="padding: 20px 0 0 20px;"
+                                            formArrayName="optionList"
+                                            *ngFor="let option of formStep2.get('optionList').controls; let i=index">
+                                            <mat-divider></mat-divider>
+                                            <div style="margin-top:15px" fxLayout="row" [formGroupName]="i">
+
+                                                <mat-form-field appearance="outline" fxFlex="15" style="padding: 5px;">
+                                                    <input #input maxlength="20" matInput placeholder="Tên lựa chọn"
+                                                        formControlName="name" (focusout)="validateOptionName(i)">
+                                                    <mat-hint>{{input.value?.length || 0}}/20 kí tự</mat-hint>
+                                                    <mat-error *ngIf="option.get('name').hasError('duplicate')">Tên lựa
+                                                        chọn bị trùng</mat-error>
+                                                    <mat-error *ngIf="option.get('name').hasError('empty')">Tên lựa chọn
+                                                        trống</mat-error>
+                                                </mat-form-field>
+
+                                                <mat-form-field appearance="outline" fxFlex="15" style="padding: 5px;">
+                                                    <input matInput placeholder="Khối lượng" formControlName="weight">
+                                                </mat-form-field>
+                                                <mat-form-field appearance="outline" fxFlex="20" style="padding: 5px;">
+                                                    <input matInput placeholder="Chi tiết" formControlName="detail">
+                                                </mat-form-field>
+
+                                                <mat-form-field appearance="outline" fxFlex="20" style="padding: 5px;">
+                                                    <input matInput placeholder="Giá niêm yết"
+                                                        formControlName="price_root"
+                                                        (input)="convertNumber($event.target.value,'price_root', i)">
+                                                </mat-form-field>
+
+                                                <mat-form-field appearance="outline" fxFlex="20" style="padding: 5px;">
+                                                    <input matInput placeholder="Giá bán" formControlName="price_new"
+                                                        (input)="convertNumber($event.target.value,'price_new', i)">
+                                                </mat-form-field>
+
+                                                <mat-form-field appearance="outline" fxFlex="10" style="padding: 5px;">
+                                                    <input matInput placeholder="Số lượng" formControlName="quantity">
+                                                </mat-form-field>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div style="margin-top: 20px;">
+                                        <button mat-button matStepperPrevious>Trở lại</button>
+                                        <button mat-button (click)="validateOption()" matStepperNext
+                                            [disabled]="formStep2.invalid">Tiếp theo</button>
+                                    </div>
+                                </form>
+                            </mat-step>
+                            <mat-step [stepControl]="formStep3">
+                                <form [formGroup]="formStep3">
+                                    <ng-template matStepLabel>Hình ảnh minh họa</ng-template>
+                                    <div fxLayout="row" style="width: 100%;">
+                                        <div *ngFor="let item of arrayImage; let i = index" class="pt-12"
+                                            style="width: 250px;height: 250px;position: relative;display: inline-block;">
+                                            <img [src]="item.fake_path"
+                                                onerror="this.src='assets/images/product/no_image.png'"
+                                                style="width: 250px;height: 250px;padding: 12px;">
+                                            <button (click)="removeImageProduct(i)" mat-icon-button class="red"
+                                                *ngIf="item.root==0" style="position: absolute;top:0;right: 0;">
+                                                <mat-icon>close</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div fxLayout="column" fxLayoutAlign="space-between start"
+                                        style="margin-left: 12px;">
+                                        <input type="file" id="btnUploadFile" class="inputFile"
+                                            (change)="uploadAvatar($event)" placeholder="Upload file"
+                                            accept=".image/jpeg, .png, .jpg">
+                                        <label style="margin: 10px 0;" for='btnUploadFile' class="labelUpload">
+                                            <mat-icon style="vertical-align: middle;">add</mat-icon><span> Thêm
+                                                ảnh</span>
+                                        </label>
+                                        <div>Bạn Chỉ Được Chọn Tối Đa 3 Hình Sản Phẩm</div>
+                                    </div>
+                                    <div>
+                                        <button mat-button matStepperPrevious>Trở lại</button>
+                                        <button mat-button matStepperNext
+                                            [disabled]="formStep1.value.product_root_id==0 && arrayImage.length==0">Tiếp
+                                            theo</button>
+                                    </div>
+                                </form>
+                            </mat-step>
+                            <mat-step [stepControl]="formStep4">
+                                <form [formGroup]="formStep4">
+                                    <ng-template matStepLabel>Phân loại</ng-template>
+                                    <mat-form-field style="width: 100%; margin-top: 20px;" appearance="outline">
+                                        <mat-label>Loài Sử Dụng</mat-label>
+                                        <mat-select placeholder="Chọn loài sử dụng" multiple style="margin-left: 1em;"
+                                            formControlName="usefor">
+                                            <mat-option *ngFor="let item of listTerm.usefor" [value]="item"
+                                                [style.margin-left.em]="item.level*2"
+                                                (onSelectionChange)="selectionChange('usefor', $event)">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field style="width: 100%; margin-top: 20px;" appearance="outline">
+                                        <mat-label>Nhóm công dụng</mat-label>
+                                        <mat-select placeholder="Chọn nhóm công dụng" multiple style="margin-left: 1em;"
+                                            formControlName="uses">
+                                            <mat-option *ngFor="let item of listTerm.uses" [value]="item"
+                                                [style.margin-left.em]="item.level*2"
+                                                (onSelectionChange)="selectionChange('uses', $event)">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field style="width: 100%; margin-top: 20px;" appearance="outline">
+                                        <mat-label>Nhóm thành phần</mat-label>
+                                        <mat-select placeholder="Chọn nhóm thành phần" multiple
+                                            style="margin-left: 1em;" formControlName="material">
+                                            <mat-option *ngFor="let item of listTerm.material" [value]="item"
+                                                [style.margin-left.em]="item.level*2"
+                                                (onSelectionChange)="selectionChange('material', $event)">
+                                                {{item.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <div>
+                                        <button mat-button matStepperPrevious>Trở lại</button>
+                                        <button mat-button matStepperNext [disabled]="formStep4.invalid">Tiếp
+                                            theo</button>
+                                    </div>
+                                </form>
+                            </mat-step>
+                            <mat-step [stepControl]="formStep5">
+                                <form [formGroup]="formStep5">
+                                    <ng-template matStepLabel>Chi tiết</ng-template>
+                                    <p style="margin-top: 12px;">Mô Tả</p>
+                                    <mat-form-field appearance="outline" style="width:100%;">
+                                        <textarea matInput placeholder="Mô tả" formControlName="description"></textarea>
+                                    </mat-form-field>
+
+
+                                    <p style="margin-top: 12px;">Thông Tin Chi Tiết</p>
+                                    <div [ngxSummernote]="summerNoteConfig" formControlName='detail'></div>
+
+                                    <div>
+                                        <button mat-button matStepperPrevious>Trở lại</button>
+                                        <button mat-button matStepperNext [disabled]="formStep5.invalid">Tiếp
+                                            theo</button>
+                                    </div>
+                                </form>
+                            </mat-step>
+                            <mat-step>
+                                <ng-template matStepLabel>Hoàn thành</ng-template>
+
+                                <div class="message-box info m-12">
+                                    Sau khi đăng, sản phẩm của bạn sẽ được xác nhận trong vòng 24 giờ trước khi xuất
+                                    hiện.
+                                </div>
+                                <div>
+                                    <button mat-button matStepperPrevious>Trở lại</button>
+                                    <button mat-button color="accent" (click)="insertProduct()">Xác nhận</button>
+                                </div>
+                            </mat-step>
+                        </mat-vertical-stepper>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

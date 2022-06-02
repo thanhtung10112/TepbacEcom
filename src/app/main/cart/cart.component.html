@@ -1,0 +1,75 @@
+<div class="page-layout simple fullwidth">
+  <div class="px-24 accent-200-bg" fxLayout="column" fxLayoutAlign="center center">
+    <h1>Giỏ hàng</h1>
+  </div>
+  <div class="p-12" fxLayout="column" fxLayoutAlign="center center" *ngIf="isNull" [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+    <h1>Giỏ hàng trống</h1>
+  </div>
+  <div class="p-12 m-12">
+      <div
+      fxLayout
+      fxLayout.xs="column"
+      fxLayoutAlign="center"
+      fxLayoutGap="5%"
+      fxLayoutGap.xs="0" *ngIf="!isNull">
+      <div class="item fuse-white-bg p-12" fxFlex="80%" fxLayout.xs="column">
+        <div class="container p-12" fxLayout.xs="column" fxLayout fxLayoutAlign="center" fxLayoutGap="5%" *ngFor="let item of listProduct; let i = index">
+              <div fxFlex="30%" fxLayout.xs="column" [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+                <img [src]="this.productService.getSitePath()+item.image" [alt]="item.name" onerror="this.src='assets/images/product/no_image.png'">
+              </div>
+              <div fxFlex="40%" fxLayout.xs="column" [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+                <p>{{item.name}}</p>
+                <p>Cung cấp bởi : <a href="">{{item.name_shop}}</a></p>
+                <p><button class="light-blue-800" mat-stroked-button color="primary" (click)="removeProduct(i)"><mat-icon>delete_outline</mat-icon> Xóa</button>
+                </p>
+              </div>
+              <div fxFlex="10%" fxLayout.xs="column" [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+                <p>{{item.price-item.price*item.sale/100}} VNĐ</p>
+              </div>
+              <div fxFlex="20%" fxLayout.xs="column" fxLayoutAlign="center" [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+                  <form class="p-12">
+                      <div class="value-button" id="decrease" (click)="decreaseValue(i)" value="Decrease Value">-</div>
+                      <input matInput type="number" id="number" [value] = "item.quantity" />
+                      <div class="value-button" id="increase" (click)="increaseValue(i)" value="Increase Value">+</div>
+                  </form>
+              </div>
+            </div>
+        </div>
+    
+       
+        
+        <div class="item" fxFlex="20%" fxLayout.xs="column" [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+            <div class="fuse-white-bg">
+                <div *ngFor="let item of listProduct" fxLayout="row p-12" fxLayoutAlign="space-between center" style="padding: 5%;">
+                  <p>{{item.name}}</p>
+                  <p>+{{item.quantity*item.price}}</p>
+                </div>
+            </div>
+            <div class="fuse-white-bg" style="margin-top: 2%;">
+                <div *ngFor="let item of listCodeDiscount | keyvalue" fxLayout="row p-12" fxLayoutAlign="space-between center" style="padding: 5%;">
+                  <p>{{item.key}}</p>
+                  <p>-{{item.value.price_sale}}</p>
+                </div>
+            </div>
+            <div class="fuse-white-bg" style="margin-top: 2%;">
+                <div fxLayout="row p-12" fxLayoutAlign="space-between center" style="padding: 5%;">
+                  <p>Thành tiền:</p>
+                  <p>{{total}} VNĐ</p>
+                </div>
+            </div>
+            <button class="mt-12" mat-raised-button color="accent" style="width: 100%;" (click)="openOrder()">Đặt hàng</button>
+         
+            <form [formGroup]="formDiscount" class="mt-12" style="width: 100%;">
+              <mat-form-field>
+                <input matInput placeholder="Mã giảm giá/Quà tặng" formControlName="code">
+                <button class="yellow-500" mat-button matSuffix (click)="checkCode()">Đồng ý</button>
+              </mat-form-field>
+            </form>
+            <mat-chip-list aria-label="Mã giảm giá">
+                <mat-chip color="accent" selected *ngFor="let item of listCodeDiscount | keyvalue">{{item.key}}<mat-icon (click)="removeCodeDiscount(item.key)">cancel</mat-icon></mat-chip>
+            </mat-chip-list>
+      
+        </div>
+      </div>
+  </div>
+</div>      

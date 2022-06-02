@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Mã giảm Giá Sản Phẩm</h2>
+<div mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+    <p><mat-label>Tên: {{data.name}}</mat-label></p>
+    <p><mat-label>Giá Bán: {{data.price_new | number}} VNĐ</mat-label></p>
+  <form [formGroup]="formCtrl">
+    <mat-form-field style="width: 100%;" appearance="outline">
+      <mat-label>Mã giảm giá</mat-label>
+      <input matInput placeholder="Mã giảm giá" formControlName="code" >
+    </mat-form-field>
+    <mat-form-field style="width: 100%;" appearance="outline">
+      <mat-label>Số lượng mã</mat-label>
+      <input type="number" matInput placeholder="Số lượng mã" formControlName="limit_code">
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Loại giảm giá</mat-label>
+      <mat-select  formControlName="type">
+        <mat-option [value]="item.key" *ngFor="let item of listType | keyvalue">
+          {{item.value.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Hình thức giảm giá</mat-label>
+      <mat-select  formControlName="all">
+        <mat-option value="0">
+          Giảm theo sản phẩm
+        </mat-option>
+        <mat-option value="1">
+          Giảm theo đơn
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 100%;" appearance="outline" *ngIf="formCtrl.value.type!='free_ship'">
+      <mat-label>Giá trị giảm</mat-label>
+      <input type="number" matInput placeholder="Giá trị giảm (%)" min="0" max="100" formControlName="sale" (input)="eventHandler($event.target.value)">
+    </mat-form-field>
+    <mat-label *ngIf="formCtrl.value.all=='0'">Giá sau khi giảm: {{price_current | number}} VNĐ</mat-label>
+    <div  *ngIf="formCtrl.value.all=='1'">
+      <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Giá trị đơn hàng tối thiểu được áp dụng</mat-label>
+        <input type="number" matInput placeholder="Giá trị đơn hàng được áp dụng" formControlName="from">
+      </mat-form-field>
+      <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Giá trị tối đa</mat-label>
+        <input type="number" matInput placeholder="Giá trị giảm tối đa" formControlName="max">
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Hủy</button>
+  <button mat-raised-button color="accent" (click)="saveDiscount()" [disabled]="!formCtrl.valid">Lưu</button>
+</div>

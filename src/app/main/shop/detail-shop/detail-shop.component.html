@@ -1,0 +1,118 @@
+<div class="page-layout carded fullwidth tabbed inner-scroll">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg warn-900-bg"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+    <div class="header px-24 warn-900-bg" fxLayout="row" fxLayoutAlign="start center">
+      <h1 class="white-fg link" routerLink="/shop">CỬA HÀNG</h1>
+    </div>
+
+    <div class="content-card mat-white-bg">
+      <!-- CONTENT TOOLBAR -->
+      <div class="toolbar px-24">
+        <h1>{{inforShop.name}}</h1>
+      </div>
+      <mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+
+      <div *ngIf="inforShop" class="p-24" fxLayout fxLayout.xs="column" fxLayoutAlign="center start" fxLayoutGap="10px" fxLayoutGap.xs="0"
+        [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+        <div class="p-24" fxLayout="column" fxLayoutAlign="start" fxFlex.gt-xs="100" fxFlex.gt-md="60">
+          <div>
+            <div style="width: 100%;height: 400px;position: relative;overflow: hidden;">
+              <img  *ngIf="inforShop.image" [src]="this.shopService.getSitePath() + (inforShop?.image).replace('/thumb_image','/ge_image/')"
+                onerror="this.src='assets/images/product/no_image.png'"
+                style="width:100%; border-top-left-radius:10px; border-top-right-radius:10px;">
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center">
+              <div class="box-savatar">
+                <img class="savatar" [src]="this.shopService.getSitePath() + inforShop.logo"
+                  onerror="this.src='assets/images/product/no_image.png'">
+              </div>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxFlex="1 0 auto">
+            <h2>#{{inforShop.code}}</h2>
+          </div>
+          <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <div fxFlex.gt-xs="50" class="p-12 text-center">
+              <input type="file" id="btnUploadFile" class="inputFile" (change)="uploadAvatar($event)"
+                placeholder="Upload file" accept=".image/jpeg, .png, .jpg">
+              <label for='btnUploadFile' class="labelUpload">
+                <span>Đổi ảnh tường</span>
+              </label>
+              <small>Nên chọn ảnh có kích thước <b>Rộng 800, Cao 400</b></small>
+            </div>
+            <div fxFlex.gt-xs="50" class="p-12 text-center">
+              <input type="file" id="btnUploadLogo" class="inputFile" (change)="uploadLogo($event)"
+                placeholder="Upload logo" accept=".image/jpeg, .png, .jpg">
+              <label for='btnUploadLogo' class="labelUpload">
+                <span>Đổi logo</span>
+              </label>
+              <small>Nên chọn ảnh có tỉ lệ <b>Vuông</b></small>
+            </div>
+          </div>
+          <div fxLayout="row" class="p-12" *ngIf="inforShop.event!=''">
+            <div class="box-event">
+              <p>Sự kiện</p>
+              <h3>{{inforShop.event}}</h3>
+            </div>
+          </div>
+          <div fxLayout="row" class="p-12" fxLayoutAlign="space-between center">
+            <h2><b>{{inforShop.name}}</b></h2>
+            <div>
+              <button mat-raised-button color="accent" (click)="openEdit(inforShop.id)" style="margin: 5px;">Chỉnh Sửa Thông
+                Tin</button>
+                <button mat-raised-button color="warn" (click)="openEvent()" style="margin: 5px;">Cập nhật sự kiện</button>
+            </div>
+          </div>
+          <div fxLayout="row" class="p-12" fxLayoutAlign="space-between center">
+            <h3>Hình thức bán</h3>
+            <h3 *ngIf="inforShop.ship==0">Bán tại của hàng</h3>
+            <h3 *ngIf="inforShop.ship==1">Bán online</h3>
+            <h3 *ngIf="inforShop.ship==2">Bán tại của hàng và online</h3>
+          </div>
+          <div fxLayout="row" class="p-12" fxLayoutAlign="space-between center">
+            <h3>Số Điện Thoại</h3>
+            <h3>{{inforShop.phone}}</h3>
+          </div>
+          <div fxLayout="row" class="p-12" fxLayoutAlign="space-between center">
+            <h3>Email</h3>
+            <h3>{{inforShop.email}}</h3>
+          </div>
+          <div fxLayout="row" class="p-12" fxLayoutAlign="space-between center">
+            <h3>Địa Chỉ</h3>
+            <h3>{{inforShop.address}}</h3>
+          </div>
+          <div fxLayout="row" class="p-12" fxLayoutAlign="space-between center">
+            <h3>Sản Phẩn Đang Bán</h3>
+            <h3>{{inforShop.count_product_active}}</h3>
+          </div>
+          <div fxLayout="row" class="p-12" fxLayoutAlign="space-between center">
+            <h3>Sản Phẩm Đang Chờ Duyệt</h3>
+            <h3>{{inforShop.count_product_not_active}}</h3>
+          </div>
+          <div fxLayout="row" class="p-12" fxLayoutAlign="space-between center">
+            <h3>Số Đơn Hàng</h3>
+            <h3>{{inforShop.count_order}}</h3>
+          </div>
+          <div fxLayout="row" class="p-12" fxLayoutAlign="space-between center">
+            <h3>Doanh Thu</h3>
+            <h3>{{numberWithCommas(inforShop.count_money)}} VNĐ</h3>
+          </div>
+          <div fxLayout="column" class="p-12" fxLayoutAlign="start">
+            <h3>Mô Tả</h3>
+            <div>
+              {{inforShop.description}}
+            </div>
+          </div>
+          
+        
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

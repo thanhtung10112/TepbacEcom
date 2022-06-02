@@ -1,0 +1,89 @@
+<h2 mat-dialog-title>Thêm sản phẩm</h2>
+<h3 mat-dialog-title>Sự kiện {{event.name}}</h3>
+<div mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+    <form [formGroup]="form"  fxLayout="column" fxLayoutAlign="start">
+        <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Sản phẩm</mat-label>
+            <mat-select placeholder="Chọn sản phẩm" formControlName="product_id">
+                <mat-form-field appearance="standard" style="width:93%; margin: 0 20px;">
+                    <input matInput type="text" (input)="search($event)" formControlName="productSearch"
+                        placeholder="Tìm sản phẩm" autocomplete="off">
+                    <mat-icon matPrefix>search</mat-icon>
+                </mat-form-field>
+                <mat-option>
+                    Chọn sản phẩm
+                </mat-option>
+                <mat-option *ngFor="let item of products$ | async" [value]="item.id">
+                    {{item.name}} | {{item.alias}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div *ngIf="seletedType">
+            <p>Khuyến mãi áp dụng</p>
+            <b>{{seletedType.content}}</b>
+            <img [src]="productService.getSitePath()+'/upload/eventeshop/'+seletedType.image" />
+        </div>
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field style="width: 100%;" appearance="outline" fxFlex.gt-xs="50" class="pr-4">
+                <mat-label>Loại sự kiện</mat-label>
+                <mat-select [placeholder]="'Chọn loại sự kiện'" formControlName="type_id"
+                    (selectionChange)="onTypeChange($event)">
+                    <mat-option *ngFor="let item of listType" [value]="item.id">
+                        {{item.name}} {{item.key=='sale_percent' ? item.value+'%' : ''}} {{(item.key=='same' || item.key=='sale_price') ? item.value+'đ' : ''}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field style="width: 100%;" appearance="outline" fxFlex.gt-xs="50" class="pl-4">
+                <mat-label>Nhóm hàng hiển thị</mat-label>
+                <mat-select [placeholder]="'Chọn nhóm'" formControlName="term_id">
+                    <mat-option *ngFor="let item of listTerm" [value]="item.id">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field style="width: 100%;" appearance="outline" fxFlex.gt-xs="50" class="pr-4">
+                <mat-label>Hình thức hiển thị</mat-label>
+                <mat-select [placeholder]="'Chọn nhóm'" formControlName="type_show">
+                    <mat-option value="flashsale">
+                        Flashsale
+                    </mat-option>
+                    <mat-option value="normal">
+                        Banner khuyến mãi trên sản phẩm
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field style="width: 100%;" appearance="outline" fxFlex.gt-xs="50" class="pl-4">
+                <mat-label>Số lượng sản phẩm </mat-label>
+                <input matInput placeholder="Số lượng sản phẩm" formControlName="quantity">
+            </mat-form-field>
+        </div>
+
+
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field style="width: 100%;" appearance="outline">
+                <mat-label>Chọn khung giờ</mat-label>
+                <mat-select [placeholder]="'Chọn khung giờ'" formControlName="timeChoose" (selectionChange)="selectedTime($event)">
+                    <mat-option value="99">
+                        Tất cả các khung giờ
+                    </mat-option>
+                    <mat-option [value]="i" *ngFor="let item of event.times ; let i = index">
+                        Từ {{item[0]}} giờ đến {{item[1]}} giờ
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        
+    </form>
+  
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<div mat-dialog-actions>
+    <button mat-button (click)="dialogRef.close()">Hủy</button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="!form.valid">Lưu</button>
+</div>

@@ -1,0 +1,25 @@
+// Import Fuse core library
+@import "@fuse/scss/core";
+
+// Import app.theme.scss
+@import "app/app.theme";
+
+//star
+@import "~css-star-rating/scss/star-rating";
+
+@import "src/@fuse/scss/fuse";
+
+/* Add application styles & imports to this file! */
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+[class*="note-"] {
+    font-size: 15px;
+}
+.note-modal-backdrop {
+    z-index: -1000000 !important;
+}
+.link {
+    cursor: pointer !important;
+}
+.white-fg {
+    color: #fff;
+}

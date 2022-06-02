@@ -1,0 +1,13 @@
+<h1 mat-dialog-title style="text-align: center;">{{data.username}}</h1>
+<div mat-dialog-content [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+  <p>{{data.content}}</p>
+  <mat-form-field class="full-width"  appearance="outline">
+    <mat-label>Trả lời</mat-label>
+    <textarea [(ngModel)]='content'  matInput placeholder="Trả lời đánh giá" value="Sushi"></textarea>
+  </mat-form-field>
+</div>
+<mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Đóng</button>
+  <button mat-button color="accent" (click)="save()">Lưu</button>
+</div>

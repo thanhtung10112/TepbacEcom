@@ -1,0 +1,17 @@
+<h1 mat-dialog-title style="text-align: center;">Báo Cáo Đơn Hàng</h1>
+<p>Báo cáo với chúng tôi nếu đơn hàng có sự cố</p>
+<div mat-dialog-content>
+  <form [formGroup]="formCtrl">
+    <div class="h2 mb-24">Thông tin cửa hàng</div>
+        <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label >Nội dung báo cáo</mat-label>
+            <textarea matInput  formControlName="content">
+                
+            </textarea>
+        </mat-form-field> 
+</form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Đóng</button>
+  <button mat-raised-button color="primary" (click)="save()">Lưu</button>
+</div>

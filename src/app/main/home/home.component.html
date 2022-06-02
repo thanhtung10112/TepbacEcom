@@ -1,0 +1,181 @@
+<div class="page-layout simple fullwidth">
+    <div>
+        <!-- CONTENT -->
+        <div class="content" fxLayout="column">
+            <div class="header p-24 blue-800-bg" fxLayout="row" fxLayoutAlign="start none">
+
+                <div fxFlex="40">
+                    <div class="px-24 box-overview">
+                        <h1>TỔNG QUAN</h1>
+                        <span>Tepbac eshop 0.2.1 beta</span>
+                        <p *ngFor="let row of dataHotlineEmail">Hotline : {{row.hotline}} | Email : {{row.email}}</p>
+                        <button *ngIf="isRegister" routerLink="/product/insert-product"
+                            class="button-action add-button green-bg" mat-raised-button>
+                            <mat-icon>add</mat-icon> Đăng sản phẩm
+                        </button>
+                    </div>
+                </div>
+
+                <div *ngIf="isRegister" class="p-24 widget" fxLayout="column" fxLayout.gt-sm="row"
+                    fxLayoutAlign="center none" fxFlex="50">
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                        fxFlex="100" *ngFor="let item of data.events">
+                        <mat-card routerLink="/event/detail/{{item.id}}" class="link fuse-card auto-width">
+                            <mat-card-content>
+                                <div fxLayout="row" fxLayoutAlign="space-between center">
+                                    <div class="h3" [innerHTML]="checkEvent(item)"></div>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="space-start center">
+                                    <p class="green-fg">{{item.name}}</p>
+                                </div>
+                                <div fxLayout="row" fxLayoutAlign="space-start center">
+
+                                    <p>{{item.description}}</p>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </fuse-widget>
+                </div>
+            </div>
+
+            <mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+            <!-- Event-->
+
+            <div *ngIf="isRegister" class="p-24 widget" fxLayout="column" fxLayout.gt-sm="row"
+                fxLayoutAlign="center none">
+                <fuse-widget class="px-24" [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                    fxFlex="100" fxFlex.gt-sm="60">
+                    <div echarts [options]="chartOption" class="demo-chart"></div>
+                    <p class="text-chart">Lượt tiếp cận shop</p>
+                </fuse-widget>
+
+                <fuse-widget class="px-24" [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                    fxFlex="100" fxFlex.gt-sm="60">
+                    <div echarts [options]="chartOptionShop" class="demo-chart"></div>
+                    <p class="text-chart">Lượt tiếp cận sản phẩm</p>
+                </fuse-widget>
+
+
+            </div>
+
+            <div *ngIf="isRegister" class="p-24 widget" fxLayout="column" fxLayout.gt-sm="row"
+                fxLayoutAlign="center none">
+                <!-- Product -->
+                <fuse-widget class="px-24" [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                    fxFlex="100" fxFlex.gt-sm="33">
+                    <mat-card routerLink="/product/selling" class="link fuse-card auto-width">
+                        <mat-card-content class="p-24">
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="h2">Đang bán</div>
+                                <button mat-icon-button fuseWidgetToggle aria-label="more">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </button>
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                <div class="green-fg font-size-72 line-height-72">
+                                    {{data.product.buying}}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500 text-uppercase">sản phẩm</div>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <p>Đang bán</p>
+                                <p>{{data.product.buyed}}</p>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <p>Chờ duyệt</p>
+                                <p>{{data.product.handling}}</p>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <p>Bị khóa</p>
+                                <p>{{data.product.blocked}}</p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </fuse-widget>
+
+                <!-- Odder -->
+                <fuse-widget class="px-24" [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                    fxFlex="100" fxFlex.gt-md="33">
+                    <mat-card routerLink="/order" class="link fuse-card auto-width">
+                        <mat-card-content class="p-24">
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="h2">Đơn hàng</div>
+                                <button mat-icon-button fuseWidgetToggle aria-label="more">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </button>
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                <div class="purple-fg font-size-72 line-height-72">
+                                    {{data.order.done}}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500 text-uppercase">đã giao</div>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <p>Chờ xác nhận</p>
+                                <p>{{data.order.not_confirm}}</p>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <p>Đang trên đường</p>
+                                <p>{{data.order.shipping}}</p>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <p>Bị hủy</p>
+                                <p>{{data.order.cancel}}</p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </fuse-widget>
+
+                <!-- Analytics -->
+                <fuse-widget class="px-24" [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                    fxFlex="100" fxFlex.gt-md="33">
+
+                    <mat-card routerLink="/statistic" class="link fuse-card auto-width">
+                        <mat-card-content class="p-24">
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="h2">Doanh thu</div>
+                                <button mat-icon-button fuseWidgetToggle aria-label="more">
+                                    <mat-icon>chevron_right</mat-icon>
+                                </button>
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                <div class="warn-fg font-size-72 line-height-72">
+                                    {{data.profit.money | number}}
+                                </div>
+                                <div class="h3 secondary-text font-weight-500 text-uppercase">đồng</div>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <p>Tổng đơn trong ngày</p>
+                                <p>{{data.profit.count_order}}</p>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <p>Sản lượng trong ngày</p>
+                                <p>{{data.profit.quantity}}</p>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <p>Lượt đánh giá</p>
+                                <p>{{data.profit.count_comment}}</p>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </fuse-widget>
+
+            </div>
+            <div *ngIf="!isRegister" class="p-12" fxLayout="column" fxLayoutAlign="center center"
+                [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
+                <h2>Bạn chưa tạo cửa hàng.</h2>
+                <h2>Vui lòng tạo cửa hàng để có thể bán sản phẩm trên ứng dụng.</h2>
+                <button mat-stroked-button routerLink="/shop/create" class="button-action accent-200-bg"
+                    color="primary">
+                    <mat-icon>add_circle_outline</mat-icon> Tạo mới cửa hàng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

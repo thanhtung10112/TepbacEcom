@@ -1,0 +1,29 @@
+.cardList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  /* Column Gap */
+  .cardList > * {
+    box-sizing: border-box;
+    padding-bottom: 10px;
+  }
+  .cardList > *:not(:last-child) {
+    margin-right: 32px;
+  }
+  /* Item sizing */
+  .cardListItem {
+    flex: 0 1 calc(25% - 32px);
+  }
+  .cardNameItem {
+    background-color: #2196F3;
+  }
+  .img-product{
+    line-height: 240px;
+    text-align: center;
+  }
+  .img-product img{
+    vertical-align: middle;
+  }
+  

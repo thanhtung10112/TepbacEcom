@@ -1,0 +1,59 @@
+<div class="page-layout simple fullwidth">
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg orange-800-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- CONTENT HEADER -->
+        <div class="header orange-800-bg p-24" fxLayout="row" fxLayoutAlign="start center">
+
+            <div>
+                <h2 class="m-0">THỐNG KÊ</h2>
+                <p *ngFor="let row of dataHotlineEmail">Hotline : {{row.hotline}} | Email : {{row.email}}</p>
+            </div>
+
+            <div class="select-shop mat-white-bg product-action">
+                <mat-form-field class="select-field-shop" mat-no-float class="m-0" floatLabel="never">
+                    <mat-label>Theo cửa hàng</mat-label>
+                    <mat-select (selectionChange)="statisticByShop($event.value)">
+                        <mat-option value="">Tất Cả</mat-option>
+                        <mat-option *ngFor="let item of listShop" [value]="item.id">{{item.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-progress-bar mode="indeterminate" *ngIf="loading.pending"></mat-progress-bar>
+
+        <div class="">
+            <div class="" fxLayout="row" fxLayoutAlign="start center">
+                <div class="select-echart">
+                    <mat-form-field class="select-field-shop " mat-no-float class="m-0" floatLabel="never">
+                        <mat-label>Thống Kê</mat-label>
+                        <mat-select (selectionChange)="showHiden($event.value)">
+                            <mat-option value="day">Ngày hiện tại</mat-option>
+                            <mat-option value="month">Tháng</mat-option>
+                            <mat-option value="year">Năm</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="">
+                <mat-card class="m-8" *ngIf="show == 'day'">
+                    <div echarts [options]="chartOptionDay" class="demo-chart"></div>
+                </mat-card>
+
+                <mat-card class="m-8" *ngIf="show == 'month'">
+                    <div echarts [options]="chartOptionMonth" class="demo-chart"></div>
+                </mat-card>
+
+                <mat-card class="m-8" *ngIf="show == 'year'">
+                    <div echarts [options]="chartOptionYear" class="demo-chart"></div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
